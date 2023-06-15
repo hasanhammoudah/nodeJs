@@ -1,19 +1,33 @@
-const http = require('http');
-const server = http.createServer((req, res) => {
-    if (req.url == '/') {
-        res.end('Welcome to our home page')
+const { readFile } = require('fs');
+const util = require('util');
+
+const getText = (path) => {
+    return new Promise((resolve, reject) => {
+        readFile(path, 'utf8', (err, data) => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve(data)
+            }
+        })
     }
-    else if (req.url == '/about') {
-        res.end('Here is our short history')
+    )
+}
 
-    }else
-    res.end(`
-    <h1>Oops!</h1>
-    <p>We can't seem to find the page you are looking for</p>
-    <a href="/">back home</a>
-    
-    `)
-})
+try {
+    start = async () => {
+        const first = await getText('./content/first.txt');
+        const second = await getText('./content/second.txt');
 
+        console.log(first, second)
 
-server.listen(4000)
+    }
+
+} catch (error) {
+    console.log(error)
+}
+
+start()
+
+// getText('./content/first.txt').then(result => console.log(result)).catch(err => console.log(err))
